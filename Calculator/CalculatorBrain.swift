@@ -3,7 +3,7 @@ import Foundation
 class CalculatorBrain {
 
     private var accumulator = 0.0
-    private var pending: PendingBinaryOperationInfo?
+    private var pending: PendingOperation?
 
     private let operations: Dictionary<String, Operation> = [
         "pi": Operation.Constant(M_PI),
@@ -28,7 +28,7 @@ class CalculatorBrain {
                     break
                 case .BinaryOperation(let function):
                     executePendingBinaryOperation()
-                    pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
+                    pending = PendingOperation(binaryFunction: function, firstOperand: accumulator)
                     break
                 case .Equals:
                     executePendingBinaryOperation()

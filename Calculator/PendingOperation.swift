@@ -1,6 +1,6 @@
 import Foundation
 
-struct PendingBinaryOperationInfo {
+struct PendingOperation {
     let binaryFunction: (Double, Double) -> Double
     let firstOperand: Double
 }
