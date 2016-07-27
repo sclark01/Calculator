@@ -3,10 +3,7 @@ import Foundation
 class CalculatorBrain {
 
     private var accumulator = 0.0
-
-    func setOperand(operand: Double) {
-        accumulator = operand
-    }
+    private var pending: PendingBinaryOperationInfo?
 
     private let operations: Dictionary<String, Operation> = [
         "pi": Operation.Constant(M_PI),
@@ -19,20 +16,6 @@ class CalculatorBrain {
         "-": Operation.BinaryOperation(-),
         "=": Operation.Equals
     ]
-
-    private enum Operation {
-        case Constant(Double)
-        case UnaryOperation((Double) -> Double)
-        case BinaryOperation((Double, Double) -> Double)
-        case Equals
-    }
-
-    private struct PendingBinaryOperationInfo {
-        var binaryFunction: (Double, Double) -> Double
-        var firstOperand: Double
-    }
-
-    private var pending: PendingBinaryOperationInfo?
 
     func performOperation(symbol: String) {
         if let operation = operations[symbol] {
@@ -53,16 +36,19 @@ class CalculatorBrain {
         }
     }
 
+    var value: String {
+        get {
+            return "\(accumulator)"
+        }
+        set {
+            accumulator = Double(newValue) ?? 0.0
+        }
+    }
+
     private func executePendingBinaryOperation() {
         if pending != nil {
             accumulator = pending!.binaryFunction(pending!.firstOperand, accumulator)
             pending = nil
-        }
-    }
-
-    var result: Double {
-        get {
-            return accumulator
         }
     }
 }
