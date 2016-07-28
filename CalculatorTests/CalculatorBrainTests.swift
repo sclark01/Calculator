@@ -132,7 +132,7 @@ class CalculatorBrainTests : QuickSpec {
                     brain.value = "2"
                     brain.performOperation("=")
 
-                    expect(brain.value) == "1.0" 
+                    expect(brain.value) == "1.0"
                 }
 
             }
