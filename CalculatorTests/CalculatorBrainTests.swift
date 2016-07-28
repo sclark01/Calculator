@@ -47,6 +47,30 @@ class CalculatorBrainTests : QuickSpec {
 
                     expect(brain.value) == "2.0"
                 }
+
+                it("should take the inverse of the value") {
+                    brain.value = "4"
+
+                    brain.performOperation("1/x")
+
+                    expect(brain.value) == "0.25"
+                }
+
+                it("should change the sign of the value") {
+                    brain.value = "4"
+
+                    brain.performOperation("+/-")
+
+                    expect(brain.value) == ("-4.0")
+                }
+
+                it("should make the value a percentage decimal") {
+                    brain.value = "50"
+
+                    brain.performOperation("%")
+
+                    expect(brain.value) == "0.5"
+                }
             }
 
             describe("binary operations") {
@@ -98,6 +122,17 @@ class CalculatorBrainTests : QuickSpec {
                     brain.performOperation("+")
 
                     expect(brain.decimalActive).to(beFalse())
+                }
+
+
+                it("should take the mod of two values") {
+                    brain.value = "5"
+
+                    brain.performOperation("mod")
+                    brain.value = "2"
+                    brain.performOperation("=")
+
+                    expect(brain.value) == "1.0" 
                 }
 
             }

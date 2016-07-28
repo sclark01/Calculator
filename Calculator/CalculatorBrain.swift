@@ -11,10 +11,14 @@ class CalculatorBrain {
         "pi": Operation.Constant(M_PI),
         "e": Operation.Constant(M_E),
         "√": Operation.UnaryOperation(sqrt),
+        "+/-": Operation.UnaryOperation({-$0}),
+        "1/x": Operation.UnaryOperation({1.0/$0}),
+        "%": Operation.UnaryOperation({$0/100.0}),
         "x": Operation.BinaryOperation(*),
         "/": Operation.BinaryOperation(/),
         "+": Operation.BinaryOperation(+),
         "-": Operation.BinaryOperation(-),
+        "mod": Operation.BinaryOperation(%),
         "=": Operation.Equals,
         "C": Operation.Clear
     ]
