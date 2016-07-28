@@ -47,13 +47,6 @@ class CalculatorBrainTests : QuickSpec {
 
                     expect(brain.value) == "2.0"
                 }
-
-                it("should take the cosine of the accumulator") {
-                    brain.performOperation("pi")
-                    brain.performOperation("cos")
-
-                    expect(brain.value) == "-1.0"
-                }
             }
 
             describe("binary operations") {
@@ -99,8 +92,35 @@ class CalculatorBrainTests : QuickSpec {
                     expect(brain.value) == "12.0"
                 }
 
+                it("should set the decimal active flag to false") {
+                    brain.value = "4.5"
+                    brain.decimalActive = true
+                    brain.performOperation("+")
+
+                    expect(brain.decimalActive).to(beFalse())
+                }
+
             }
 
+            describe("clear") {
+                it("should set the value back to 0") {
+                    brain.value = "5.0"
+
+                    brain.performOperation("C")
+
+                    expect(brain.value) == "0.0"
+
+                }
+
+                it("should set decimal active flag to false") {
+                    brain.value = "4.5"
+                    brain.decimalActive = true
+
+                    brain.performOperation("C")
+
+                    expect(brain.decimalActive).to(beFalse())
+                }
+            }
         }
     }
 }

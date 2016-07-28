@@ -5,4 +5,5 @@ enum Operation {
     case UnaryOperation((Double) -> Double)
     case BinaryOperation((Double, Double) -> Double)
     case Equals
+    case Clear
 }

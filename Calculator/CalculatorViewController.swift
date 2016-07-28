@@ -18,6 +18,14 @@ class CalculatorViewController: UIViewController {
         userIsInTheMiddleOfTyping = true
     }
 
+    @IBAction func touchDecimal(sender: UIButton) {
+        if (!brain.decimalActive) {
+            touchDigit(sender)
+            brain.decimalActive = true
+        }
+    }
+
+
     @IBAction private func performOperation(sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             brain.value = display.text!
