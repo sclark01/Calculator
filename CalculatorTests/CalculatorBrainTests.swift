@@ -134,7 +134,6 @@ class CalculatorBrainTests : QuickSpec {
 
                     expect(brain.value) == "1.0"
                 }
-
             }
 
             describe("clear") {
@@ -187,7 +186,24 @@ class CalculatorBrainTests : QuickSpec {
 
                     expect(brain.description) == expectedDesc
                 }
+            }
 
+            describe("is partial result") {
+                it("should return true when there is a binary result pending") {
+                    brain.value = "3"
+                    brain.performOperation("+")
+
+                    expect(brain.isPartialResult).to(beTrue())
+                }
+
+                it("should return true when there is a binary result pending") {
+                    brain.value = "3"
+                    brain.performOperation("+")
+                    brain.value = "2"
+                    brain.performOperation("=")
+
+                    expect(brain.isPartialResult).to(beFalse())
+                }
             }
         }
     }

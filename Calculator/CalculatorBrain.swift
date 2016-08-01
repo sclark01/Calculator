@@ -4,9 +4,9 @@ class CalculatorBrain {
 
     private var accumulator = 0.0
     private var pending: PendingOperation?
+    private var operationsInProcess = false
 
     var description = " "
-    var operationsInProcess = false
     var decimalActive = false
 
     private let operations: Dictionary<String, Operation> = [
@@ -60,9 +60,13 @@ class CalculatorBrain {
         }
     }
 
+    var isPartialResult: Bool {
+        return pending != nil
+    }
+
     private func executePendingBinaryOperation() {
         decimalActive = false
-        if pending != nil {
+        if isPartialResult {
             description += "\(accumulator)"
             accumulator = pending!.binaryFunction(pending!.firstOperand, accumulator)
             pending = nil
