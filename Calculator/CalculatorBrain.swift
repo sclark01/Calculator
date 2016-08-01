@@ -4,9 +4,16 @@ class CalculatorBrain {
 
     private var accumulator = 0.0
     private var pending: PendingOperation?
+    private var pendingUnaryOperation = false
     private var operationsInProcess = false
 
-    var description = " "
+    var description = ""
+    var descriptionForDisplay: String {
+        get {
+            return description + "\(isPartialResult ? "..." : "=")"
+        }
+    }
+
     var decimalActive = false
 
     private let operations: Dictionary<String, Operation> = [
@@ -31,8 +38,10 @@ class CalculatorBrain {
             case .Constant(let value):
                 accumulator = value
             case .UnaryOperation(let function):
-                description += "\(symbol)\(accumulator)"
+                pendingUnaryOperation = true
+                formatDescriptionForUnaryOperation(symbol)
                 accumulator = function(accumulator)
+                description += ")"
             case .BinaryOperation(let function):
                 executePendingBinaryOperation()
                 pending = PendingOperation(binaryFunction: function, firstOperand: accumulator)
@@ -42,9 +51,10 @@ class CalculatorBrain {
             case .Clear:
                 pending = nil
                 decimalActive = false
-                description = " "
-                accumulator = 0.0
                 operationsInProcess = false
+                pendingUnaryOperation = false
+                description = ""
+                accumulator = 0.0
                 return
             }
             operationsInProcess = true
@@ -64,12 +74,21 @@ class CalculatorBrain {
         return pending != nil
     }
 
+    private func formatDescriptionForUnaryOperation(symbol: String) {
+        if (isPartialResult) {
+            description += "\(symbol)(\(accumulator)"
+        } else {
+            description = "\(symbol)(\(description.isEmpty ? "\(accumulator)" : description)"
+        }
+    }
+
     private func executePendingBinaryOperation() {
         decimalActive = false
         if isPartialResult {
-            description += "\(accumulator)"
+            if !pendingUnaryOperation { description += "\(accumulator)" }
             accumulator = pending!.binaryFunction(pending!.firstOperand, accumulator)
             pending = nil
         }
+        pendingUnaryOperation = false
     }
 }

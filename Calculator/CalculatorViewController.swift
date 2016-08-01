@@ -3,6 +3,7 @@ import UIKit
 class CalculatorViewController: UIViewController {
 
     @IBOutlet private weak var display: UILabel!
+    @IBOutlet weak var descriptionDisplay: UILabel!
 
     private var userIsInTheMiddleOfTyping = false
     
@@ -17,6 +18,7 @@ class CalculatorViewController: UIViewController {
             display.text = digit
         }
         userIsInTheMiddleOfTyping = true
+        displayDescription()
     }
 
     @IBAction func touchDecimal(sender: UIButton) {
@@ -24,10 +26,7 @@ class CalculatorViewController: UIViewController {
             touchDigit(sender)
             brain.decimalActive = true
         }
-    }
-
-    @IBAction func equalsLongPressed(sender: UILongPressGestureRecognizer) {
-        display.text = brain.description
+        displayDescription()
     }
 
     @IBAction private func performOperation(sender: UIButton) {
@@ -38,6 +37,11 @@ class CalculatorViewController: UIViewController {
         if let mathSymbol = sender.currentTitle {
             brain.performOperation(mathSymbol)
         }
+        displayDescription()
         display.text = brain.value
+    }
+
+    private func displayDescription() {
+        descriptionDisplay.text = brain.descriptionForDisplay
     }
 }

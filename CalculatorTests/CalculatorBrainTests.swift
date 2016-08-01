@@ -155,10 +155,10 @@ class CalculatorBrainTests : QuickSpec {
                     expect(brain.decimalActive).to(beFalse())
                 }
 
-                it("should set the description to space") {
+                it("should set the description to empty") {
                     brain.description = "someDescription"
                     brain.performOperation("C")
-                    expect(brain.description) == " "
+                    expect(brain.description) == ""
                 }
             }
 
@@ -169,7 +169,7 @@ class CalculatorBrainTests : QuickSpec {
                     brain.value = "5"
                     brain.performOperation("=")
 
-                    let expectedDesc = " 4.0+5.0"
+                    let expectedDesc = "4.0+5.0"
 
                     expect(brain.description) == expectedDesc
                 }
@@ -182,9 +182,16 @@ class CalculatorBrainTests : QuickSpec {
                     brain.value = "4"
                     brain.performOperation("=")
 
-                    let expectedDesc = " 5.0+3.0x4.0"
+                    let expectedDesc = "5.0+3.0x4.0"
 
                     expect(brain.description) == expectedDesc
+                }
+
+                it("should put value in parentheses for unary operations") {
+                    brain.value = "4"
+                    brain.performOperation("√")
+
+                    expect(brain.description) == "√(4.0)"
                 }
             }
 
@@ -204,6 +211,54 @@ class CalculatorBrainTests : QuickSpec {
 
                     expect(brain.isPartialResult).to(beFalse())
                 }
+            }
+
+            describe("description for display") {
+                it("should display ... after operator when pending operation") {
+                    brain.value = "5"
+                    brain.performOperation("+")
+
+                    expect(brain.descriptionForDisplay) == "5.0+..."
+                }
+
+                it("should display = after operand when not pending") {
+                    brain.value = "5"
+                    brain.performOperation("+")
+                    brain.value = "4"
+                    brain.performOperation("=")
+
+                    expect(brain.descriptionForDisplay) == "5.0+4.0="
+                }
+
+                it("should display squareroot description properly") {
+                    brain.value = "7"
+                    brain.performOperation("+")
+                    brain.value = "9"
+                    brain.performOperation("=")
+                    brain.performOperation("√")
+
+                    expect(brain.descriptionForDisplay) == "√(7.0+9.0)="
+                }
+
+                it("should display squareroot of second operand pending description properly") {
+                    brain.value = "7"
+                    brain.performOperation("+")
+                    brain.value = "9"
+                    brain.performOperation("√")
+
+                    expect(brain.descriptionForDisplay) == "7.0+√(9.0)..."
+                }
+
+                it("should display squareroot of second operand  description properly") {
+                    brain.value = "7"
+                    brain.performOperation("+")
+                    brain.value = "9"
+                    brain.performOperation("√")
+                    brain.performOperation("=")
+
+                    expect(brain.descriptionForDisplay) == "7.0+√(9.0)="
+                }
+
             }
         }
     }
