@@ -5,6 +5,8 @@ class CalculatorBrain {
     private var accumulator = 0.0
     private var pending: PendingOperation?
 
+    var description = " "
+    var operationsInProcess = false
     var decimalActive = false
 
     private let operations: Dictionary<String, Operation> = [
@@ -28,22 +30,24 @@ class CalculatorBrain {
             switch operation {
             case .Constant(let value):
                 accumulator = value
-                break
             case .UnaryOperation(let function):
+                description += "\(symbol)\(accumulator)"
                 accumulator = function(accumulator)
-                break
             case .BinaryOperation(let function):
                 executePendingBinaryOperation()
                 pending = PendingOperation(binaryFunction: function, firstOperand: accumulator)
-                break
+                description += "\(!operationsInProcess ? "\(accumulator)" : "")\(symbol)"
             case .Equals:
                 executePendingBinaryOperation()
-                break
             case .Clear:
                 pending = nil
                 decimalActive = false
+                description = " "
                 accumulator = 0.0
+                operationsInProcess = false
+                return
             }
+            operationsInProcess = true
         }
     }
 
@@ -56,11 +60,10 @@ class CalculatorBrain {
         }
     }
 
-
-
     private func executePendingBinaryOperation() {
         decimalActive = false
         if pending != nil {
+            description += "\(accumulator)"
             accumulator = pending!.binaryFunction(pending!.firstOperand, accumulator)
             pending = nil
         }

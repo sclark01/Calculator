@@ -5,6 +5,7 @@ class CalculatorViewController: UIViewController {
     @IBOutlet private weak var display: UILabel!
 
     private var userIsInTheMiddleOfTyping = false
+    
     private var brain = CalculatorBrain()
 
     @IBAction private func touchDigit(sender: UIButton) {
@@ -25,6 +26,9 @@ class CalculatorViewController: UIViewController {
         }
     }
 
+    @IBAction func equalsLongPressed(sender: UILongPressGestureRecognizer) {
+        display.text = brain.description
+    }
 
     @IBAction private func performOperation(sender: UIButton) {
         if userIsInTheMiddleOfTyping {

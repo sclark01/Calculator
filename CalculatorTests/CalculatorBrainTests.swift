@@ -155,6 +155,39 @@ class CalculatorBrainTests : QuickSpec {
 
                     expect(brain.decimalActive).to(beFalse())
                 }
+
+                it("should set the description to space") {
+                    brain.description = "someDescription"
+                    brain.performOperation("C")
+                    expect(brain.description) == " "
+                }
+            }
+
+            describe("description") {
+                it("should accumulate all operators and operands") {
+                    brain.value = "4"
+                    brain.performOperation("+")
+                    brain.value = "5"
+                    brain.performOperation("=")
+
+                    let expectedDesc = " 4.0+5.0"
+
+                    expect(brain.description) == expectedDesc
+                }
+
+                it("should correctly describe multiple operations") {
+                    brain.value = "5"
+                    brain.performOperation("+")
+                    brain.value = "3"
+                    brain.performOperation("x")
+                    brain.value = "4"
+                    brain.performOperation("=")
+
+                    let expectedDesc = " 5.0+3.0x4.0"
+
+                    expect(brain.description) == expectedDesc
+                }
+
             }
         }
     }
